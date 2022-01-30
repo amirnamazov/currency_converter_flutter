@@ -1,3 +1,4 @@
+import 'package:currency_converter/pages/register_email/register_email_page.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -21,20 +22,30 @@ class _RegisterPageState extends State<RegisterPage> {
         children: [
           ElevatedButton(
             onPressed: () {
-
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => RegisterEmailPage(),
+                  )
+              );
             },
             child: Text("Sign up with Email", style: TextStyle(color: Colors.black45),),
             style: ElevatedButton.styleFrom(
                 primary: Colors.white,
                 onPrimary: Colors.black45,
-                side: BorderSide(color: Colors.black45)
+                side: BorderSide(color: Colors.black45),
+                padding: EdgeInsets.all(15)
             ),
           ),
+          SizedBox(height: 10,),
           ElevatedButton(
               onPressed: () {
 
               },
-              child: Text("Sign up with Google")
+              child: Text("Sign up with Google"),
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.all(15)
+            ),
           )
         ],
       ),
