@@ -1,0 +1,36 @@
+name: currency_converter
+description: Currency exchange app
+
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.15.0-226.0.dev <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get_it: ^7.2.0
+  shared_preferences: ^2.0.6
+  connectivity: ^3.0.6
+  flutter_bloc: ^7.1.0
+  dio: ^4.0.0
+  firebase_auth: ^3.3.6
+  google_sign_in: ^5.2.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/font/Roboto-Regular.ttf
+          weight: 400
+        - asset: assets/font/Roboto-Medium.ttf
+          weight: 500
+        - asset: assets/font/Roboto-Bold.ttf
+          weight: 700
