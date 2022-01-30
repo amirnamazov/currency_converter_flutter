@@ -1,4 +1,6 @@
 import 'package:currency_converter/model/common_state.dart';
+import 'package:currency_converter/pages/home/cubit/home_page_cubit.dart';
+import 'package:currency_converter/pages/home/home_page.dart';
 import 'package:currency_converter/utils/show_snack_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +17,17 @@ class RegisterEmailCubit extends Cubit<CommonState> {
           password: password
       ).then((value) {
         emit(ContentState());
-        print("oooooooo " + value.additionalUserInfo!.isNewUser.toString());
-        // showSnackBar(context, "ooooooooooo " + value.credential!.token.toString());
+        if (value.additionalUserInfo!.isNewUser) {
+          // Navigator.pushReplacement(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (BuildContext context) => BlocProvider(
+          //         create: (context) => HomePageCubit(),
+          //         child: HomePage(),
+          //       ),
+          //     )
+          // );
+        }
       });
     } on FirebaseAuthException catch  (e) {
       emit(ContentState());

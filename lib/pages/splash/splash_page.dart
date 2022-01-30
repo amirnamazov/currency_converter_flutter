@@ -1,4 +1,4 @@
-import 'package:currency_converter/pages/register/register_page.dart';
+import 'package:currency_converter/pages/sign_in/sign_in_page.dart';
 import 'package:currency_converter/utils/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,7 +44,7 @@ class _SplashPageState extends State<SplashPage> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => RegisterPage(),
+          builder: (BuildContext context) => SignInPage(),
         )
     );
   }

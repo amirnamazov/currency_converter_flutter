@@ -18,11 +18,11 @@ class RequestClient {
   static List excludeToken = [
     '/api/v1/auth/login/',
     "/api/v1/auth/reset-password/",
-    '/api/v1/fcm-device/register/',
+    '/api/v1/fcm-device/sign_in/',
     '/api/v1/phone-prefixes/',
     '/api/v1/fcm-device/remove/',
     '/api/v1/warehouses',
-    '/api/v1/auth/register/',
+    '/api/v1/auth/sign_in/',
   ];
 
   RequestClient._createInstance();

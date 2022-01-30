@@ -4,6 +4,7 @@ import 'package:currency_converter/utils/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'constants/const_string.dart';
+import 'package:bot_toast/bot_toast.dart';
 
 final GlobalKey<NavigatorState> navigatorKey =
 GlobalKey<NavigatorState>(debugLabel: "Currency Converter Nav Key");
@@ -30,6 +31,8 @@ class _CurrencyConverterAppState extends State<CurrencyConverterApp> {
       child: MaterialApp(
         navigatorKey: navigatorKey,
         title: kTitle,
+        builder: BotToastInit(),
+        navigatorObservers: [BotToastNavigatorObserver()],
         theme: ThemeData(
           primaryColor: kPrimaryColor,
           fontFamily: kRoboto,

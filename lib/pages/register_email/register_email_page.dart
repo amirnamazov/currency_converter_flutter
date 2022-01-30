@@ -1,6 +1,6 @@
 import 'package:currency_converter/components/custom_text_field.dart';
 import 'package:currency_converter/model/common_state.dart';
-import 'package:currency_converter/pages/register_email/register_email_cubit.dart';
+import 'package:currency_converter/pages/register_email/cubit/register_email_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -1,6 +1,6 @@
 class RequestApi {
   static const String login = 'auth/login/?business_support=true';
-  static const String register = 'auth/register/';
+  static const String register = 'auth/sign_in/';
   static const String userData = 'user/';
   static const String forgetPassword = 'auth/reset-password/';
   static const String country = 'countries/';
@@ -63,7 +63,7 @@ class RequestApi {
     return 'declarations/done-$country/';
   }
 
-  static String fcmDeviceRegister = 'fcm-device/register/';
+  static String fcmDeviceRegister = 'fcm-device/sign_in/';
   static String fcmDeviceUnregister = 'fcm-device/remove/';
 
   static String trustedPerson = 'user/trusted/';
