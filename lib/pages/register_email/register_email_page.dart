@@ -1,21 +1,47 @@
 import 'package:currency_converter/components/custom_text_field.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:currency_converter/model/common_state.dart';
+import 'package:currency_converter/pages/register_email/register_email_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RegisterEmailPage extends StatelessWidget {
+class RegisterEmailPage extends StatefulWidget {
+  @override
+  _RegisterEmailPageState createState() => _RegisterEmailPageState();
+}
+
+class _RegisterEmailPageState extends State<RegisterEmailPage> {
 
   GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
+  RegisterEmailCubit? _registerEmailCubit;
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: Text("Sign up with Email"),
-      centerTitle: true,
-    ),
-    body: Padding(
+  void didChangeDependencies() {
+    _registerEmailCubit = BlocProvider.of(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Sign up with Email"),
+        centerTitle: true,
+      ),
+      body: BlocBuilder<RegisterEmailCubit, CommonState>(
+        builder: (context, state) {
+          if (state is LoadingState) {
+            return Center(child: CircularProgressIndicator(),);
+          } else {
+            return _buildContent();
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildContent() => Padding(
       padding: EdgeInsets.all(20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,9 +74,12 @@ class RegisterEmailPage extends StatelessWidget {
               )
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (_globalKey.currentState!.validate()) {
-
+                _registerEmailCubit!.signUpUser(context,
+                    email: _emailController.text.trim(),
+                    password: _confirmPasswordController.text.trim()
+                );
               }
             },
             child: Container(
@@ -64,6 +93,5 @@ class RegisterEmailPage extends StatelessWidget {
           )
         ],
       )
-    ),
   );
 }

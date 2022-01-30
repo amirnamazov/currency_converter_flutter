@@ -1,5 +1,7 @@
+import 'package:currency_converter/pages/register_email/register_email_cubit.dart';
 import 'package:currency_converter/pages/register_email/register_email_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -25,7 +27,10 @@ class _RegisterPageState extends State<RegisterPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => RegisterEmailPage(),
+                    builder: (BuildContext context) => BlocProvider(
+                      create: (context) => RegisterEmailCubit(),
+                      child: RegisterEmailPage(),
+                    ),
                   )
               );
             },
