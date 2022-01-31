@@ -45,13 +45,13 @@ class _RegisterEmailPageState extends State<RegisterEmailPage> {
       key: _globalKey,
       child: ListView(
         padding: EdgeInsets.all(20),
-        // controller: ScrollController(),
         physics: ClampingScrollPhysics(),
         children: [
           CustomTextField(
             controller: _emailController,
             title: "Email",
             textInputType: TextInputType.emailAddress,
+            autofocus: true,
           ),
           SizedBox(height: 20,),
           CustomTextField(

@@ -8,4 +8,9 @@ void setupLocator() {
     final shared = await SharedPreferences.getInstance();
     return shared;
   });
+
+  // locator.registerLazySingleton(() => BlocProvider(
+  //   create: (context) => SignInCubit(),
+  //   child: SignInPage(),
+  // ));
 }

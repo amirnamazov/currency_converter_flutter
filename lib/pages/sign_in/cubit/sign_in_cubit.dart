@@ -1,22 +1,20 @@
 import 'package:currency_converter/model/common_state.dart';
-import 'package:currency_converter/utils/show_snack_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RegisterEmailCubit extends Cubit<CommonState> {
-  RegisterEmailCubit() : super(ContentState());
+class SignInCubit extends Cubit<CommonState> {
+  SignInCubit() : super(ContentState());
 
-  void signUpUser(BuildContext context, {required String email, required String password}) async {
+  void signInUser(BuildContext context, {required String email, required String password}) async {
     try {
       emit(LoadingState());
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
           password: password
       ).then((value) {
         emit(ContentState());
-        if (value.additionalUserInfo!.isNewUser) {
-          showSnackBar(context, "New account created successfully!");
+        if (true) {
           // Navigator.pushReplacement(
           //     context,
           //     MaterialPageRoute(
@@ -30,7 +28,7 @@ class RegisterEmailCubit extends Cubit<CommonState> {
       });
     } on FirebaseAuthException catch  (e) {
       emit(ContentState());
-      showSnackBar(context, e.message!);
+
     }
   }
 }

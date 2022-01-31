@@ -17,6 +17,7 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+    resizeToAvoidBottomInset: false,
     appBar: AppBar(
       title: Text("Sign in"),
       centerTitle: true,
@@ -47,10 +48,7 @@ class _SignInPageState extends State<SignInPage> {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => BlocProvider(
-                          create: (context) => HomePageCubit(),
-                          child: HomePage(),
-                        ),
+                        builder: (BuildContext context) => HomePage(),
                       )
                   );
                 }
