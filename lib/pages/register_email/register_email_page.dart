@@ -41,38 +41,33 @@ class _RegisterEmailPageState extends State<RegisterEmailPage> {
     );
   }
 
-  Widget _buildContent() => Padding(
-      padding: EdgeInsets.all(20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildContent() => Form(
+      key: _globalKey,
+      child: ListView(
+        padding: EdgeInsets.all(20),
+        // controller: ScrollController(),
+        physics: ClampingScrollPhysics(),
         children: [
-          Form(
-              key: _globalKey,
-              child: Column(
-                children: [
-                  CustomTextField(
-                    controller: _emailController,
-                    title: "Email",
-                    textInputType: TextInputType.emailAddress,
-                  ),
-                  SizedBox(height: 20,),
-                  CustomTextField(
-                    controller: _passwordController,
-                    title: "Password",
-                    textInputType: TextInputType.visiblePassword,
-                    passwordControllers: [_passwordController, _confirmPasswordController],
-                  ),
-                  SizedBox(height: 20,),
-                  CustomTextField(
-                    controller: _confirmPasswordController,
-                    title: "Confirm Password",
-                    textInputType: TextInputType.visiblePassword,
-                    passwordControllers: [_passwordController, _confirmPasswordController],
-                  ),
-                  SizedBox(height: 20,),
-                ],
-              )
+          CustomTextField(
+            controller: _emailController,
+            title: "Email",
+            textInputType: TextInputType.emailAddress,
           ),
+          SizedBox(height: 20,),
+          CustomTextField(
+            controller: _passwordController,
+            title: "Password",
+            textInputType: TextInputType.visiblePassword,
+            passwordControllers: [_passwordController, _confirmPasswordController],
+          ),
+          SizedBox(height: 20,),
+          CustomTextField(
+            controller: _confirmPasswordController,
+            title: "Confirm Password",
+            textInputType: TextInputType.visiblePassword,
+            passwordControllers: [_passwordController, _confirmPasswordController],
+          ),
+          SizedBox(height: 20,),
           ElevatedButton(
             onPressed: () async {
               if (_globalKey.currentState!.validate()) {
