@@ -1,6 +1,12 @@
+import 'package:currency_converter/components/show_snack_bar.dart';
+import 'package:currency_converter/constants/const_shared_preference.dart';
+import 'package:currency_converter/pages/home/cubit/home_page_cubit.dart';
+import 'package:currency_converter/pages/home/home_page.dart';
 import 'package:currency_converter/pages/sign_in/sign_in_page.dart';
 import 'package:currency_converter/utils/locator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatefulWidget {
@@ -9,20 +15,19 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  SharedPreferences? sharedPreferences;
 
   @override
   void initState() {
     super.initState();
     locator.allReady().then((value) => {
-      Future.delayed(const Duration(milliseconds: 800), () async {
-        sharedPreferences = locator.get();
-        // if (sharedPreferences!.getString(kToken) == null) {
-        //   openStartPage();
-        // } else {
-        //   fetchTerms();
-        // }
-        openStartPage();
+      Future.delayed(Duration(milliseconds: 1000), () async {
+        final SharedPreferences sharedPreferences = locator.get();
+        if (await sharedPreferences.getString(kToken) != null
+            && await sharedPreferences.getString(kToken)!.isNotEmpty) {
+          _openHomePage();
+        } else {
+          _checkGoogleSigneIn();
+        }
       })
     });
   }
@@ -30,17 +35,31 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.blue,
-      body: Container(
-        color: Colors.white,
-        child: Center(
-          child: Text("dddddddddd"),
+      body: Center(
+        child: Text(
+          "Currency Converter",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 30
+          ),
         ),
-      ),
+      )
     );
   }
 
-  openStartPage() {
+  void _checkGoogleSigneIn() {
+    GoogleSignIn().isSignedIn().then((isSignedIn) {
+      if (isSignedIn) {
+        _openHomePage();
+      } else {
+        _openSignInPage();
+      }
+    });
+  }
+
+  void _openSignInPage() {
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -49,43 +68,15 @@ class _SplashPageState extends State<SplashPage> {
     );
   }
 
-  /*Future<void> fetchTerms() async {
-    InternetConnection.check().then((value) async {
-      if (value) {
-        await RequestClient().get(
-          endPoint: RequestApi.terms,
-          onSuccess: (statusCode, response) {
-            TermsModel termsModel = TermsModel.fromJson(json.decode(response!));
-            kTerms = termsModel.parsedContent!;
-            fetchSettings();
-          },
-          onFailure: (statusCode, response) {
-            openStartPage();
-          },
-          onError: () {
-            openStartPage();
-          },
-        );
-      }
-    });
+  void _openHomePage() {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => BlocProvider(
+            create: (context) => HomePageCubit(),
+            child: HomePage(),
+          ),
+        ), (Route<dynamic> route) => false
+    );
   }
-
-  Future<void> fetchSettings() async {
-    InternetConnection.check().then((value) {
-      if (value) {
-        RequestClient().get(
-          endPoint: RequestApi.settings,
-          onSuccess: (statusCode, response) {
-            SettingsModel settingsModel =
-                SettingsModel.fromJson(json.decode(response!));
-
-            locator.registerLazySingleton<SettingsModel>(() => settingsModel);
-            openMainPage();
-          },
-          onFailure: (statusCode, response) {},
-          onError: () {},
-        );
-      }
-    });
-  }*/
 }

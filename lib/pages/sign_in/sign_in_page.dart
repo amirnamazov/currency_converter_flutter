@@ -1,10 +1,13 @@
+import 'package:currency_converter/constants/const_shared_preference.dart';
 import 'package:currency_converter/pages/home/cubit/home_page_cubit.dart';
 import 'package:currency_converter/pages/home/home_page.dart';
 import 'package:currency_converter/pages/register_email/cubit/register_email_cubit.dart';
 import 'package:currency_converter/pages/register_email/register_email_page.dart';
+import 'package:currency_converter/utils/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'component/sign_in_dialog.dart';
 
@@ -15,6 +18,8 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+
+  final SharedPreferences sharedPreferences = locator.get();
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -44,8 +49,9 @@ class _SignInPageState extends State<SignInPage> {
           SizedBox(height: 10,),
           ElevatedButton(
             onPressed: () {
-              GoogleSignIn().signIn().then((value) {
+              GoogleSignIn().signIn().then((value) async {
                 if (value!.email.isNotEmpty) {
+                  await sharedPreferences.setString(kGoogleEmail, value.email);
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(

@@ -1,14 +1,22 @@
 import 'package:currency_converter/components/custom_text_field.dart';
+import 'package:currency_converter/constants/const_shared_preference.dart';
 import 'package:currency_converter/model/common_state.dart';
 import 'package:currency_converter/pages/sign_in/cubit/sign_in_cubit.dart';
+import 'package:currency_converter/utils/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void showSignInDialog(BuildContext context) {
+void showSignInDialog(BuildContext context) async {
 
   GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  final SharedPreferences sharedPreferences = locator.get();
+  String? email = await sharedPreferences.getString(kEmail);
+  if (email != null) {
+    _emailController.text = email;
+  }
 
   showDialog(
       context: context,
@@ -32,13 +40,14 @@ void showSignInDialog(BuildContext context) {
                           controller: _emailController,
                           title: "Email",
                           textInputType: TextInputType.emailAddress,
-                          autofocus: true,
+                          autofocus: email != null ? false : true,
                         ),
                         SizedBox(height: 20,),
                         CustomTextField(
                           controller: _passwordController,
                           title: "Password",
                           textInputType: TextInputType.visiblePassword,
+                          autofocus: email != null ? true : false,
                         ),
                         SizedBox(height: 20,),
                         ElevatedButton(
@@ -52,7 +61,7 @@ void showSignInDialog(BuildContext context) {
                             }
                           },
                           child: Container(
-                              height: 15,
+                              height: 20,
                               width: double.infinity,
                               alignment: Alignment.center,
                               child: state is LoadingState
