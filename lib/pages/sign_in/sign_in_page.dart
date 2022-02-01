@@ -9,6 +9,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'component/sign_in_dialog.dart';
 
 class SignInPage extends StatefulWidget {
+
   @override
   _SignInPageState createState() => _SignInPageState();
 }
@@ -45,11 +46,14 @@ class _SignInPageState extends State<SignInPage> {
             onPressed: () {
               GoogleSignIn().signIn().then((value) {
                 if (value!.email.isNotEmpty) {
-                  Navigator.pushReplacement(
+                  Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => HomePage(),
-                      )
+                        builder: (BuildContext context) => BlocProvider(
+                          create: (context) => HomePageCubit(),
+                          child: HomePage(),
+                        ),
+                      ), (Route<dynamic> route) => false
                   );
                 }
               });
@@ -69,7 +73,9 @@ class _SignInPageState extends State<SignInPage> {
                     child: RegisterEmailPage(),
                   ),
                 )
-            ),
+            ).then((newAccountCreated) {
+              if (newAccountCreated) showSignInDialog(context);
+            }),
             child: Text("Create an account"),
           )
         ],

@@ -41,11 +41,11 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   openStartPage() {
-    Navigator.pushReplacement(
+    Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
           builder: (BuildContext context) => SignInPage(),
-        )
+        ), (Route<dynamic> route) => false
     );
   }
 
