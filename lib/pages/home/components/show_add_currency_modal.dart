@@ -5,10 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 
-void showAddCurrencyModal(BuildContext context, {ResponseModel? responseModel}) {
+void showAddCurrencyModal(BuildContext context,
+    {ResponseModel? responseModel,
+      ValueChanged<String>? addCurrency,
+      ValueChanged<String>? replaceCurrency}) {
 
   AddCurrencyDialogCubit? cubit;
   bool searchTapped = false;
+  FocusNode focusNode = FocusNode();
 
   showSlidingBottomSheet(
       context,
@@ -37,6 +41,7 @@ void showAddCurrencyModal(BuildContext context, {ResponseModel? responseModel}) 
                       child: TextField(
                         scrollPhysics: ClampingScrollPhysics(),
                         textAlign: TextAlign.end,
+                        focusNode: focusNode,
                         maxLength: 5,
                         textAlignVertical: TextAlignVertical.center,
                         onChanged: (t) => cubit!.setCurrencyList(responseModel, t),
@@ -56,52 +61,55 @@ void showAddCurrencyModal(BuildContext context, {ResponseModel? responseModel}) 
             ),
           ),
           customBuilder: (cc, s, sh) => BlocProvider(
-            create: (context) {
-              return AddCurrencyDialogCubit();
-            },
-            child: Builder(
-              builder: (c) {
-                if (!searchTapped) cubit = BlocProvider.of(c)..setCurrencyList(responseModel!, "");
-                return BlocBuilder<AddCurrencyDialogCubit, CommonState>(
-                  builder: (context, state) {
-                    return Material(
-                        child: ListView(
-                            controller: s,
-                            physics: ClampingScrollPhysics(),
-                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            children: cubit!.currencyList.map((e) {
-                              return InkWell(
-                                onTap: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Column(
-                                  children: [
-                                    SizedBox(height: 15,),
-                                    Row(
-                                      children: [
-                                        SizedBox(width: 5,),
-                                        Text(e!.key),
-                                        Spacer(),
-                                        Text(e.value.toString()),
-                                        SizedBox(width: 5,),
-                                      ],
-                                    ),
-                                    SizedBox(height: 15,),
-                                    Container(
-                                      width: double.infinity,
-                                      height: 1,
-                                      color: Colors.black26,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }).toList()
-                        )
-                    );
-                  },
-                );
+              create: (context) {
+                return AddCurrencyDialogCubit();
               },
-            )
+              child: Builder(
+                builder: (c) {
+                  if (!searchTapped) cubit = BlocProvider.of(c)..setCurrencyList(responseModel!, "");
+                  return BlocBuilder<AddCurrencyDialogCubit, CommonState>(
+                    builder: (context, state) {
+                      return Material(
+                          child: ListView(
+                              controller: s,
+                              physics: ClampingScrollPhysics(),
+                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              children: cubit!.currencyList.map((e) {
+                                return InkWell(
+                                  onTap: () {
+                                    focusNode.unfocus();
+                                    if (addCurrency != null) addCurrency.call(e!.key);
+                                    else if (replaceCurrency != null) replaceCurrency.call(e!.key);
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 15,),
+                                      Row(
+                                        children: [
+                                          SizedBox(width: 5,),
+                                          Text(e!.key),
+                                          Spacer(),
+                                          Text(e.value.toString()),
+                                          SizedBox(width: 5,),
+                                        ],
+                                      ),
+                                      SizedBox(height: 15,),
+                                      Container(
+                                        width: double.infinity,
+                                        height: 1,
+                                        color: Colors.black26,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList()
+                          )
+                      );
+                    },
+                  );
+                },
+              )
           ),
         );
       }

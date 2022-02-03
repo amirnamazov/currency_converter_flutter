@@ -9,14 +9,16 @@ class CurrencyField extends StatefulWidget {
     this.autofocus = false,
     this.onChanged,
     this.removeField,
-    this.readOnly = false
+    this.replaceField,
+    this.readOnly = false,
   });
 
   final TextEditingController? controller;
   final ScrollController? scrollController;
   final bool autofocus;
   final ValueChanged<String>? onChanged;
-  final Function()? removeField;
+  final ValueChanged<String>? removeField;
+  final ValueChanged<String>? replaceField;
   final bool readOnly;
   final String prefix;
 
@@ -43,9 +45,7 @@ class _CurrencyFieldState extends State<CurrencyField> {
           mainAxisSize: MainAxisSize.min,
           children: [
             InkWell(
-              onTap: () {
-
-              },
+              onTap: () => widget.replaceField!.call(widget.prefix),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -59,6 +59,7 @@ class _CurrencyFieldState extends State<CurrencyField> {
               child: TextField(
                 controller: widget.controller,
                 scrollController: widget.scrollController,
+                // focusNode: widget.focusNode,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 scrollPadding: EdgeInsets.zero,
                 scrollPhysics: ClampingScrollPhysics(),
@@ -79,7 +80,9 @@ class _CurrencyFieldState extends State<CurrencyField> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 widget.readOnly ? IconButton(
-                  onPressed: () {},// widget.removeField!.call(),
+                  onPressed: () {
+                    if (widget.readOnly) widget.removeField!.call(widget.prefix);
+                  },
                   icon: Icon(Icons.delete_outlined),
                   padding: EdgeInsets.zero,
                   splashRadius: 24,

@@ -14,31 +14,36 @@ class HomePageCubit extends Cubit<CommonState> {
   List<MapEntry<String, dynamic>?> currencyList = [];
   List<TextEditingController> list = [];
   List<ScrollController> cList = [];
+  String? _baseCurrency;
 
-  getData() {
+  getData({String base_currency = 'USD', bool replaced = false}) {
     InternetConnection.check().then((value) {
       if (value) {
-        _fetchData();
+        _fetchData(base_currency, replaced);
       } else {
         emit(InternetErrorState());
       }
     });
   }
 
-  void _fetchData() {
+  void _fetchData(String base_currency, bool replaced) {
     emit(LoadingState());
     RequestClient().get(
       endPoint: RequestApi.latest,
+      queryParam: {"base_currency" : base_currency},
       onSuccess: (code, response) {
         responseModel = ResponseModel.fromJson(json.decode(response!));
-        currencyList = responseModel!.data!.entries.toList();
-        list.clear();
-        cList.clear();
-        currencyList.forEach((element) {
-          list.add(TextEditingController());
-          cList.add(ScrollController());
-        });
-        emit(ContentState());
+        if (replaced) {
+          List<MapEntry<String, dynamic>?> allList = responseModel!.data!.entries.toList();
+          for (int i = 0; i < currencyList.length; i++) {
+            if (currencyList[i]!.key != base_currency)
+              currencyList[i] = allList[allList.indexWhere((e) => e!.key == currencyList[i]!.key)];
+            else
+              currencyList[i] = allList[allList.indexWhere((e) => e!.key == _baseCurrency)];
+          }
+          emit(ContentState());
+        }
+        else addCurrency('EUR');
       },
       onFailure: (code, response) {
         emit(ErrorState());
@@ -47,5 +52,38 @@ class HomePageCubit extends Cubit<CommonState> {
         emit(ErrorState());
       },
     );
+  }
+
+  void addCurrency(String prefix) {
+    List<MapEntry<String, dynamic>?> allList = responseModel!.data!.entries.toList();
+    currencyList.add(allList[allList.indexWhere((element) => element!.key == prefix)]);
+    _updateControllers();
+  }
+
+  void removeCurrency(String prefix) {
+    currencyList.removeAt(currencyList.indexWhere((element) => element!.key == prefix));
+    _updateControllers();
+  }
+
+  void replaceCurrency(String initialPrefix, String finalPrefix) {
+    if (initialPrefix == responseModel!.query!.baseCurrency) {
+      _baseCurrency = responseModel!.query!.baseCurrency;
+      getData(base_currency: finalPrefix, replaced: true);
+    } else {
+      List<MapEntry<String, dynamic>?> allList = responseModel!.data!.entries.toList();
+      currencyList[currencyList.indexWhere((element) => element!.key == initialPrefix)]
+      = allList[allList.indexWhere((element) => element!.key == finalPrefix)];
+      emit(ContentState());
+    }
+  }
+
+  void _updateControllers() {
+    list.clear();
+    cList.clear();
+    currencyList.forEach((element) {
+      list.add(TextEditingController());
+      cList.add(ScrollController());
+    });
+    emit(ContentState());
   }
 }

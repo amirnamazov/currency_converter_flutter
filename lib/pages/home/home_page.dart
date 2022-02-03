@@ -28,6 +28,11 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  replaceField (String initialPrefix) => showAddCurrencyModal(context,
+      responseModel: homePageCubit!.responseModel!,
+      replaceCurrency: (finalPrefix) => homePageCubit!.replaceCurrency(initialPrefix, finalPrefix)
+  );
+
   @override
   void didChangeDependencies() {
     homePageCubit = BlocProvider.of(context)..getData();
@@ -35,12 +40,16 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+    // resizeToAvoidBottomInset: false,
     appBar: AppBar(
       title: Text("Convert"),
       centerTitle: true,
       actions: [
         IconButton(
-          onPressed: () => showSignOutModal(context),
+          onPressed: () {
+
+            showSignOutModal(context);
+          },
           icon: Icon(Icons.account_circle_outlined),
         )
       ],
@@ -63,6 +72,9 @@ class _HomePageState extends State<HomePage> {
         CurrencyField(
           prefix: homePageCubit!.responseModel!.query!.baseCurrency!,
           onChanged: setText,
+          controller: TextEditingController(),
+          // focusNode: focusNode,
+          replaceField: replaceField,
         ),
         Column(
           children: homePageCubit!.currencyList.map((e) =>
@@ -71,13 +83,17 @@ class _HomePageState extends State<HomePage> {
                 controller: homePageCubit!.list[homePageCubit!.currencyList.indexOf(e)],
                 scrollController: homePageCubit!.cList[homePageCubit!.currencyList.indexOf(e)],
                 readOnly: true,
+                removeField: homePageCubit!.removeCurrency,
+                replaceField: replaceField,
               ),
           ).toList(),
         ),
         ElevatedButton(
           onPressed: () {
-            if (homePageCubit!.currencyList.isNotEmpty) {
-              showAddCurrencyModal(context, responseModel: homePageCubit!.responseModel!);
+            if (homePageCubit!.responseModel!.data!.isNotEmpty) {
+              showAddCurrencyModal(context,
+                  responseModel: homePageCubit!.responseModel!,
+                  addCurrency: homePageCubit!.addCurrency);
             } else {
               homePageCubit!.getData();
             }
