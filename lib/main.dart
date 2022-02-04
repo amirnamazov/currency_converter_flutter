@@ -24,22 +24,17 @@ class CurrencyConverterApp extends StatefulWidget {
 class _CurrencyConverterAppState extends State<CurrencyConverterApp> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
-      child: MaterialApp(
-        navigatorKey: navigatorKey,
-        title: kTitle,
-        builder: BotToastInit(),
-        navigatorObservers: [BotToastNavigatorObserver()],
-        theme: ThemeData(
-          primaryColor: kPrimaryColor,
-          fontFamily: kRoboto,
-        ),
-        debugShowCheckedModeBanner: false,
-        home: SplashPage(),
+    return MaterialApp(
+      navigatorKey: navigatorKey,
+      title: kTitle,
+      builder: BotToastInit(),
+      navigatorObservers: [BotToastNavigatorObserver()],
+      theme: ThemeData(
+        primaryColor: kPrimaryColor,
+        fontFamily: kRoboto,
       ),
+      debugShowCheckedModeBanner: false,
+      home: SplashPage(),
     );
   }
 }

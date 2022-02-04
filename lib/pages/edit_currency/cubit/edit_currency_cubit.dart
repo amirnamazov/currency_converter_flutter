@@ -2,8 +2,8 @@ import 'package:currency_converter/model/common_state.dart';
 import 'package:currency_converter/model/response.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddCurrencyDialogCubit extends Cubit<CommonState> {
-  AddCurrencyDialogCubit() : super(ContentState());
+class EditCurrencyCubit extends Cubit<CommonState> {
+  EditCurrencyCubit() : super(ContentState());
 
   List<MapEntry<String, dynamic>?> currencyList = [];
 

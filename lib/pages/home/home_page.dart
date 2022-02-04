@@ -1,11 +1,11 @@
 import 'package:currency_converter/components/show_signout_modal.dart';
 import 'package:currency_converter/model/common_state.dart';
+import 'package:currency_converter/pages/edit_currency/cubit/edit_currency_cubit.dart';
+import 'package:currency_converter/pages/edit_currency/edit_currency_page.dart';
 import 'package:currency_converter/pages/home/components/currency_field.dart';
 import 'package:currency_converter/pages/home/cubit/home_page_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'components/show_add_currency_modal.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -28,9 +28,17 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  replaceField (String initialPrefix) => showAddCurrencyModal(context,
-      responseModel: homePageCubit!.responseModel!,
-      replaceCurrency: (finalPrefix) => homePageCubit!.replaceCurrency(initialPrefix, finalPrefix)
+  replaceField (String initialPrefix) => Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (BuildContext context) => BlocProvider(
+        create: (context) => EditCurrencyCubit(),
+        child: EditCurrencyPage(
+            responseModel: homePageCubit!.responseModel!,
+            replaceCurrency: (finalPrefix) => homePageCubit!.replaceCurrency(initialPrefix, finalPrefix)
+        ),
+      ),
+    ),
   );
 
   @override
@@ -73,7 +81,6 @@ class _HomePageState extends State<HomePage> {
           prefix: homePageCubit!.responseModel!.query!.baseCurrency!,
           onChanged: setText,
           controller: TextEditingController(),
-          // focusNode: focusNode,
           replaceField: replaceField,
         ),
         Column(
@@ -91,9 +98,18 @@ class _HomePageState extends State<HomePage> {
         ElevatedButton(
           onPressed: () {
             if (homePageCubit!.responseModel!.data!.isNotEmpty) {
-              showAddCurrencyModal(context,
-                  responseModel: homePageCubit!.responseModel!,
-                  addCurrency: homePageCubit!.addCurrency);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => BlocProvider(
+                      create: (context) => EditCurrencyCubit(),
+                      child: EditCurrencyPage(
+                          responseModel: homePageCubit!.responseModel!,
+                          addCurrency: (prefix) => homePageCubit!.addCurrency(prefix)
+                      ),
+                    ),
+                  ),
+              );
             } else {
               homePageCubit!.getData();
             }

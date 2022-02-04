@@ -6,7 +6,6 @@ class CurrencyField extends StatefulWidget {
     required this.prefix,
     this.controller,
     this.scrollController,
-    this.autofocus = false,
     this.onChanged,
     this.removeField,
     this.replaceField,
@@ -15,7 +14,6 @@ class CurrencyField extends StatefulWidget {
 
   final TextEditingController? controller;
   final ScrollController? scrollController;
-  final bool autofocus;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? removeField;
   final ValueChanged<String>? replaceField;
